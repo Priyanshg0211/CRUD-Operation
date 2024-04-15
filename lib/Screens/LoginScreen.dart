@@ -20,7 +20,7 @@ class _LoginpageState extends State<Loginpage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Login',
+          'Email Auth',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue,
