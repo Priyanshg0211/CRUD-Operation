@@ -1,4 +1,4 @@
-import 'package:crud_operation/LoginScreen.dart';
+import 'package:crud_operation/Screens/LoginScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
