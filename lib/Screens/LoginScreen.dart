@@ -1,3 +1,4 @@
+import 'package:crud_operation/Functions/authfucntion.dart';
 import 'package:flutter/material.dart';
 
 class Loginpage extends StatefulWidget {
@@ -9,8 +10,10 @@ class Loginpage extends StatefulWidget {
 
 class _LoginpageState extends State<Loginpage> {
   final _formkey = GlobalKey<FormState>();
-
-
+  bool isLogin = false;
+  String email = '';
+  String Password = '';
+  String Username = '';
 
   @override
   Widget build(BuildContext context) {
@@ -29,28 +32,86 @@ class _LoginpageState extends State<Loginpage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                key: ValueKey('Username'),
-                decoration: InputDecoration(hintText: 'Enter Username'),
+              !isLogin
+                  ? TextFormField(
+                      key: ValueKey('Username'),
+                      decoration: InputDecoration(hintText: 'Enter Username'),
+                      validator: (value) {
+                        if (value.toString().length < 3) {
+                          return 'Username is too Short';
+                        } else {
+                          return null;
+                        }
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          Username = value!;
+                        });
+                      },
+                    )
+                  : Container(),
+              SizedBox(
+                height: 10,
               ),
-              SizedBox(height: 10,),
               TextFormField(
-                key: ValueKey('Email'),
-                decoration: InputDecoration(hintText: 'Enter Email'),
-              ),
+                  key: ValueKey('Email'),
+                  decoration: InputDecoration(hintText: 'Enter Email'),
+                  validator: (value) {
+                       if (!(value.toString().contains('@')))  {
+                      return 'Invalid Email';
+                    } else {
+                      return null;
+                    }
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      email = value!;
+                    });
+                  }),
               TextFormField(
                 obscureText: true,
                 key: ValueKey('Password'),
                 decoration: InputDecoration(hintText: 'Enter Password'),
+                validator: (value) {
+                  if (value.toString().length < 6) {
+                    return 'Password is so small';
+                  } else {
+                    return null;
+                  }
+                },
+                onSaved: (value) {
+                  setState(() {
+                    Password = value!;
+                  });
+                },
               ),
               SizedBox(height: 20),
               Container(
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(onPressed: () {}, child: Text('Sign Up')),
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_formkey.currentState!.validate()) {
+                          _formkey.currentState!.save();
+                          isLogin
+                              ? signin(email, Password)
+                              : signup(email, Password);
+                        }
+                    },
+                    child: isLogin ? Text('Login') : Text('Sign Up')),
               ),
-              SizedBox(height: 10,),
-              TextButton(onPressed: () {}, child: Text('Already have an account | Sign in')),
+              SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      isLogin = !isLogin;
+                    });
+                  },
+                  child: isLogin
+                      ? Text('Dont have an account | Sign Up')
+                      : Text('Already Signed up? Login')),
             ],
           ),
         ),
